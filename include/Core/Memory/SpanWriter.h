@@ -1,9 +1,12 @@
 #pragma once
 
 #include <memory>
+
 #include "Core/Util/Types.h"
 
 namespace ml {
+
+// TODO: Add bytes written field
 
 /**
  * An unsafe writer to arbitrary memory
