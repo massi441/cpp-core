@@ -59,7 +59,7 @@ public:
         return this->hasValue();
     }
 
-    operator T() const {
+    explicit operator T() const {
         return mValue;
     }
 
