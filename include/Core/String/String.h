@@ -8,6 +8,8 @@
 
 namespace ml {
 
+// TODO: Delete entire file
+
 /**
  * A wrapper around a heap allocated C-style string
  */
