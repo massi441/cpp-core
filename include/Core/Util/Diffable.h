@@ -19,7 +19,6 @@ public:
         return newValue != mCurrent;
     }
 
-
     bool updateAndDiff(const T& newValue) {
         bool isNew = newValue != mCurrent;
         mCurrent = newValue;
