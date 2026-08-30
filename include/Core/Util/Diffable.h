@@ -19,6 +19,12 @@ public:
         return newValue != mCurrent;
     }
 
+    /**
+     * Updates the current value and diffs it against the previous value.
+     * Note: Updates the value regardless of diff result
+     * @param newValue The new value to update and diff
+     * @return True if the new value is different from the previous one, false otherwise
+     */
     bool updateAndDiff(const T& newValue) {
         bool isNew = newValue != mCurrent;
         mCurrent = newValue;

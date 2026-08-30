@@ -24,7 +24,7 @@ public:
      * @return True if the timer has expired, false otherwise
      */
     bool update() {
-        if (this->isActive()) {
+        if (mTime > 0) {
             mTime--;
         }
 
