@@ -64,7 +64,7 @@ private:
     bool mIsStateChanged = false;
 };
 
-// TODO: Remove macro
+// TODO: Remove macro and replace with concept
 
 #define USE_TICK_STATE_MACHINE(T, ...)                                                          \
     private:                                                                                    \
@@ -110,12 +110,12 @@ bool isTick(const T* t, uint tick) {
 }
 
 template <typename T>
-bool isOverTick(const T* t, uint tickCount) {
+bool isGreaterTick(const T* t, uint tickCount) {
     return t->getTickStateMachine()->isOverTick(tickCount);
 }
 
 template <typename T>
-bool isOverEqualTick(const T* t, uint tickCount) {
+bool isGreaterEqualTick(const T* t, uint tickCount) {
     return t->getTickStateMachine()->isOverEqualTick(tickCount);
 }
 
