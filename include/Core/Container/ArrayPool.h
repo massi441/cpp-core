@@ -11,7 +11,7 @@
 namespace ml {
 
 /**
- * A pool of reusable Array's
+ * A pool of reusable Array's with varying sizes
  * @tparam T The type stored by the array's
  */
 template <typename T>
