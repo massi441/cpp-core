@@ -19,12 +19,13 @@ public:
 
     template <typename ...F>
     void update(T* thisPtr, F&& ...args) {
+        mIsStateChanged = false;
+
         (thisPtr->*mCurrentFunc)(std::forward<F>(args) ...);
 
+        // skip tick increment is the state was mutated by the previous state
         if (!mIsStateChanged) {
             mTick++;
-        } else {
-            mIsStateChanged = false;
         }
     }
 
