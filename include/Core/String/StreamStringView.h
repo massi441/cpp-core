@@ -56,10 +56,7 @@ public:
     size_t length() const { return mView.length(); }
 
     const char* c_str() const { return mView.data(); }
-    // operator const char*() const { return mView.data(); }
-
     std::string_view strView() const { return mView; }
-    // operator std::string_view() const { return mView; }
 
 private:
     std::string_view mView;

@@ -39,4 +39,12 @@ private:
     uint64_t mCount;
 };
 
+template <typename T>
+class IterableStreamView {
+public:
+
+private:
+
+};
+
 }
