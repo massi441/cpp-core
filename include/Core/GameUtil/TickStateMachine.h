@@ -65,7 +65,7 @@ private:
     bool mIsStateChanged = false;
 };
 
-// TODO: Remove macro and replace with concept
+// TODO: Remove macro and replace with concept or base class
 
 #define USE_TICK_STATE_MACHINE(T, ...)                                                          \
     private:                                                                                    \
