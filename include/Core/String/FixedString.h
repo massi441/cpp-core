@@ -33,7 +33,7 @@ public:
         return std::strlen(this->c_str());
     }
 
-    const char* c_str() const {
+    const char* cstr() const {
         return reinterpret_cast<const char*>(mBuf.cdata());
     }
 

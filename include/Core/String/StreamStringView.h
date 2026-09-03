@@ -55,7 +55,7 @@ public:
     size_t size() const { return mView.size(); }
     size_t length() const { return mView.length(); }
 
-    const char* c_str() const { return mView.data(); }
+    const char* cstr() const { return mView.data(); }
     std::string_view strView() const { return mView; }
 
 private:

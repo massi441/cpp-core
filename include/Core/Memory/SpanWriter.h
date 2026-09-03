@@ -6,14 +6,13 @@
 
 namespace ml {
 
-// TODO: Add bytes written field
-
 /**
  * An unsafe writer to arbitrary memory
  */
 class SpanWriter {
 public:
     SpanWriter(void* stream) {
+        mStart = static_cast<char*>(stream);
         mCursor = static_cast<char*>(stream);
     }
 
@@ -52,13 +51,20 @@ public:
         mCursor += byteCount;
     }
 
-    uint64_t offsetFrom(const void* start) const {
-        return reinterpret_cast<uint64_t>(mCursor) - reinterpret_cast<uint64_t>(start);
+    void reset() {
+        mCursor = mStart;
     }
 
-    char* cursor() const { return mCursor; }
+    char* cursor() const {
+        return mCursor;
+    }
+
+    size_t bytesWritten() const {
+        return mCursor - mStart;
+    }
 
 private:
+    char* mStart;
     char* mCursor;
 };
 
