@@ -65,8 +65,6 @@ private:
     bool mIsStateChanged = false;
 };
 
-// TODO: Remove macro and replace with concept or base class
-
 #define USE_TICK_STATE_MACHINE(T, ...)                                                          \
     private:                                                                                    \
         ml::TickStateMachine<T __VA_OPT__(,) __VA_ARGS__> mStateMachine;                        \
