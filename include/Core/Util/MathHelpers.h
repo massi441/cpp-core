@@ -44,20 +44,6 @@ struct MathHelpers {
         *outValue = clamp(*outValue, min, max);
     }
 
-    static T clampMax(T value, T max) {
-        if (value > max) {
-            return max;
-        }
-        return value;
-    }
-
-    static T clampMin(T value, T min) {
-        if (value < min) {
-            return min;
-        }
-        return value;
-    }
-
     static T abs(T value) {
         return value > 0 ? value : -value;
     }
