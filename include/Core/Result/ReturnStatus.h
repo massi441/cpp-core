@@ -6,6 +6,8 @@
 
 namespace ml {
 
+// TODO: Factory functions and private ctors
+
 /**
  * A wrapper around a function's success status, with an optional error message for failures.
  * Acts as an alternative to exceptions.
@@ -32,6 +34,18 @@ public:
     explicit ReturnStatus(std::error_code ec) {
         mIsSuccess = !ec;
         mMessage = mIsSuccess ? "" : ec.message();
+    }
+
+    static ReturnStatus Success() {
+        return ReturnStatus(true);
+    }
+
+    static ReturnStatus Failure() {
+        return ReturnStatus(false);
+    }
+
+    static ReturnStatus Failure(const std::string& message) {
+        return ReturnStatus(message);
     }
 
     bool isSuccess() const {

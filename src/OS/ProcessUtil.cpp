@@ -1,5 +1,7 @@
 #include "Core/OS/ProcessUtil.h"
 
+#include "Core/Result/ReturnValue.h"
+
 #ifdef WIN32
 #include <TlHelp32.h>
 #endif
@@ -77,12 +79,13 @@ bool terminateProcess(ProcessHandle handle, int returnCode) {
     return TerminateProcess(handle, returnCode);
 }
 
-ml::ReturnStatus tryTerminateAllProcessInstance(const std::wstring& processName, int returnCode) {
+ml::ReturnValue<int> tryTerminateAllProcessInstance(const std::wstring& processName, int returnCode) {
     HANDLE snapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (snapShot == INVALID_HANDLE_VALUE) {
         return "Failed to create windows 32 snapshot";
     }
 
+    int closedCount = 0;
     PROCESSENTRY32W entry{ sizeof(entry) };
     if (Process32FirstW(snapShot, &entry)) {
         do {
@@ -99,7 +102,9 @@ ml::ReturnStatus tryTerminateAllProcessInstance(const std::wstring& processName,
         } while (Process32NextW(snapShot, &entry));
     }
 
-    return CloseHandle(snapShot);
+    CloseHandle(snapShot);
+
+    return closedCount;
 }
 
 #endif

@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 
 namespace ml {
 
-ml::ReturnStatus ensureDirCreated(const fs::path &path) {
+ml::ReturnStatus ensureDirCreated(const fs::path& path) {
     std::error_code ec;
     if (fs::exists(path, ec)) {
         return true;
@@ -95,7 +95,7 @@ ml::ReturnStatus backupDirNumbered(const std::filesystem::path& source, const st
             fs::remove_all(maxBackupPath, ec);
 
             if (ec) {
-                return ml::ReturnStatus("Failed to remove oldest backup \"", maxBackupPath.string().c_str() ,"\" during backup numbered operation: ", ec.message().c_str());
+                return ml::ReturnStatus("Failed to remove oldest backup \"", maxBackupPath.string().c_str(), "\" during backup numbered operation: ", ec.message().c_str());
             }
         }
 

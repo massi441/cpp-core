@@ -10,10 +10,14 @@ template <typename T>
 requires std::is_default_constructible_v<T>
 class ReturnValue {
 public:
-    template <typename F>
-    ReturnValue(F&& value) {
-        mValue = std::forward<F>(value);
+    ReturnValue(const T& value) {
+        mValue = value;
         mMessage = "";
+    }
+
+    ReturnValue(const char* message) {
+        mValue = T();
+        mMessage = message;
     }
 
     ReturnValue(const std::string& message) {
