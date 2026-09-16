@@ -44,6 +44,20 @@ struct MathHelpers {
         *outValue = clamp(*outValue, min, max);
     }
 
+    /**
+     * Clamps a variable to be at least the minimum value provided
+     */
+    static void clampMin(T* outValue, T min) {
+        *outValue = max(*outValue, min);
+    }
+
+    /**
+     * Clamps a variable to be at most a provided value
+     */
+    static void clampMax(T* outValue, T max) {
+        *outValue = min(*outValue, max);
+    }
+
     static T abs(T value) {
         return value > 0 ? value : -value;
     }
