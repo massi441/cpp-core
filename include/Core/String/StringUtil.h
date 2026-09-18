@@ -1,9 +1,7 @@
 #pragma once
 
-#include <cstring>
 #include <sstream>
 #include <string>
-#include <string_view>
 #include <vector>
 
 namespace ml {
@@ -76,6 +74,10 @@ std::string concatString(Args... strings) {
     ((ptr = ml::stpcpy(ptr, strings)), ...);
 
     return str;
+}
+
+inline const char* toString(bool boolean) {
+    return boolean ? "true" : "false";
 }
 
 // TODO: Add case insensitive comparison
