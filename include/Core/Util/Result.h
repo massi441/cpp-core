@@ -44,15 +44,15 @@ private:
 };
 
 template <typename T, EnumClass E>
-struct ResultData final {
+struct ReturnResult final {
 public:
     template <typename F>
-    static ResultData Success(F&& data) {
-        return ResultData(std::forward<F>(data));
+    static ReturnResult Success(F&& data) {
+        return ReturnResult(std::forward<F>(data));
     }
 
-    static ResultData Failure(E error) {
-        return ResultData(error);
+    static ReturnResult Failure(E error) {
+        return ReturnResult(error);
     }
 
     bool isSuccess() const {
@@ -88,9 +88,9 @@ private:
     std::optional<E> mError;
 
     template <typename F>
-    ResultData(F&& data) : mData(std::forward<F>(data)) {}
+    ReturnResult(F&& data) : mData(std::forward<F>(data)) {}
 
-    ResultData(E error) : mError(error) {}
+    ReturnResult(E error) : mError(error) {}
 };
 
 }
