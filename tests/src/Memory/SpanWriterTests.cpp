@@ -1,6 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "Core/Memory/SpanWriter.h"
+#include "Core/String/StringUtil.h"
 
 TEST_CASE("Writes 3 Integers") {
     // Arrange
@@ -37,10 +38,10 @@ TEST_CASE("Writes values into a struct") {
     // Act
     writer.write(age);
     writer.write(balance);
-    writer.write(name, strlen(name) + 1);
+    writer.write(name, std::strlen(name) + 1);
 
     // Assert
     REQUIRE(person.age == age);
     REQUIRE(person.balance == balance);
-    REQUIRE(std::strcmp(person.name, name) == 0);
+    REQUIRE(ml::streql(person.name, name));
 }

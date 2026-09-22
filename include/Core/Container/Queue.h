@@ -6,6 +6,10 @@
 
 namespace ml {
 
+/**
+ * A queue backed by a ring array
+ * @tparam T The type of element stored in the queue
+ */
 template <typename T>
 class Queue {
 public:
@@ -88,5 +92,8 @@ private:
         return index;
     }
 };
+
+template <typename T>
+using RingQueue = ml::Queue<T>;
 
 }
