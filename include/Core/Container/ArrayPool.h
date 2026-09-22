@@ -56,7 +56,7 @@ public:
     }
 
     /**
-     * Attempts to rent a fixed array of the nearest requested size from the current pool,
+     * Attempts to rent a array of the nearest requested size from the current pool,
      * falling back to larger buckets up to maxOverflowCount before allocating on the heap.
      * @param requestedSize The minimum size of the fixed array
      * @param maxOverflowCount The maximum number of larger buckets to try before heap allocating
@@ -85,7 +85,7 @@ public:
     }
 
     /**
-     * Returns a previously rented fixed array back to the pool.
+     * Returns a previously rented array back to the pool.
      * If the corresponding bucket is full or the buffer size is out of pool range, the buffer is deleted.
      * @param buffer The buffer to return
      * @return True if the buffer was successfully returned to the pool, false if it was deleted
