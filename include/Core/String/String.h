@@ -51,7 +51,7 @@ public:
         this->terminate();
     }
 
-    String(const char* str) : String(str, strlen(str)) {
+    String(const char* str) : String(str, std::strlen(str)) {
 
     }
 

@@ -21,7 +21,7 @@ if (MSVC)
 endif ()
 
 # Testing stuff
-option(BUILD_CORE_TEST "Enable building the test project" ON)
+option(BUILD_CORE_TEST "Enable building the test project" OFF)
 
 if (BUILD_CORE_TEST)
     enable_testing()

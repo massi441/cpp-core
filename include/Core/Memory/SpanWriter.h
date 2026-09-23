@@ -37,7 +37,7 @@ public:
      * @param str the string to write into the stream
      */
     void writeStr(const char* str) {
-        size_t len = strlen(str);
+        size_t len = std::strlen(str);
         write(str, len);
         mCursor += len;
     }

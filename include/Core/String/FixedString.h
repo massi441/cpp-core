@@ -21,7 +21,7 @@ public:
         std::memcpy(mBuf.data(), str, maxLength);
     }
 
-    FixedString(const char* str) : FixedString(str, strlen(str)) {
+    FixedString(const char* str) : FixedString(str, std::strlen(str)) {
 
     }
 
@@ -30,7 +30,7 @@ public:
     }
 
     uint64_t length() const {
-        return std::strlen(this->c_str());
+        return std::strlen(this->cstr());
     }
 
     const char* cstr() const {

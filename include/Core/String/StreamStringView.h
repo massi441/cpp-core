@@ -27,7 +27,7 @@ public:
         mView = std::string_view(str, length);
     }
 
-    StreamStringView(const char* str) : StreamStringView(str, strlen(str)) {
+    StreamStringView(const char* str) : StreamStringView(str, std::strlen(str)) {
 
     }
 

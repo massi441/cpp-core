@@ -80,6 +80,13 @@ inline const char* toString(bool boolean) {
     return boolean ? "true" : "false";
 }
 
+/**
+ * Returns the length of a compile time string
+ */
+consteval size_t strlen(const char* str) {
+    return std::char_traits<char>::length(str);
+}
+
 // TODO: Add case insensitive comparison
 // TODO: Add trimming functions
 
