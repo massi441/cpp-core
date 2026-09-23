@@ -7,8 +7,6 @@
 
 namespace ml {
 
-//TODO: Use placement new for memory allocation
-
 /**
  * A container for a dynamically allocated, but fixed-size C-style array.
  */

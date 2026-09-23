@@ -1,18 +1,17 @@
 #pragma once
 
-#include <utility>
+#include <cstdint>
+#include <type_traits>
 
 namespace ml {
 
 // TODO: Indexable container subtype
 
-// TODO: Fix CRTP issues on loops
-
 template <typename TContainer, typename T>
 class Container {
 public:
     T* find(const T& item) {
-        for (T& it : *this) {
+        for (T& it : this->self()) {
             if (it == item) {
                 return &it;
             }
@@ -23,7 +22,7 @@ public:
 
     template <typename F>
     T* findIf(const F& predicate) {
-        for (T& it : *this) {
+        for (T& it : this->self()) {
             if (predicate(it)) {
                 return &it;
             }
@@ -33,7 +32,7 @@ public:
     }
 
     const T* find(const T& item) const {
-        for (const T& it : *this) {
+        for (const T& it : this->self()) {
             if (it == item) {
                 return &it;
             }
@@ -44,7 +43,7 @@ public:
 
     template <typename F>
     const T* findIf(const F& predicate) const {
-        for (const T& it : *static_cast<const TContainer*>(this)) {
+        for (const T& it : this->self()) {
             if (predicate(it)) {
                 return &it;
             }
@@ -54,9 +53,9 @@ public:
     }
 
     template <typename F>
-    T* findIf(const F& predicate, uint64_t start, uint64_t end) {
-        T* it = static_cast<TContainer*>(this)->begin() + start;
-        T* last = it + end;
+    T* findIf(const F& predicate, uint64_t start, uint64_t count) {
+        T* it = this->self().begin() + start;
+        T* last = it + count;
 
         while (it != last) {
             if (predicate(*it)) {
@@ -70,9 +69,9 @@ public:
     }
 
     template <typename F>
-    const T* findIf(const F& predicate, uint64_t start, uint64_t end) const {
-        T* it = static_cast<TContainer*>(this)->begin() + start;
-        T* last = it + end;
+    const T* findIf(const F& predicate, uint64_t start, uint64_t count) const {
+        const T* it = this->self().begin() + start;
+        const T* last = it + count;
 
         while (it != last) {
             if (predicate(*it)) {
@@ -88,7 +87,7 @@ public:
     template <typename B>
     requires std::is_convertible_v<T, B>
     bool contains(const B& item) const {
-        for (const T& it : *static_cast<const TContainer*>(this)) {
+        for (const T& it : this->self()) {
             if (it == item) {
                 return true;
             }
@@ -103,12 +102,12 @@ public:
      * @return true if the item is inside the array, false otherwise
      */
     bool contains(const T& item) const {
-        return this->contains<T>(item);
+        return this->template contains<T>(item);
     }
 
     template <typename F>
     bool containsIf(const F& predicate) const {
-        for (const T& item : *static_cast<const TContainer*>(this)) {
+        for (const T& item : this->self()) {
             if (predicate(item)) {
                 return true;
             }
@@ -118,9 +117,9 @@ public:
     }
 
     template <typename F>
-    bool containsIf(const F& predicate, uint64_t start, uint64_t end) const {
-        T* it = static_cast<TContainer*>(this)->begin() + start;
-        T* last = it + end;
+    bool containsIf(const F& predicate, uint64_t start, uint64_t count) const {
+        const T* it = this->self().begin() + start;
+        const T* last = it + count;
 
         while (it != last) {
             if (predicate(*it)) {
@@ -139,15 +138,13 @@ public:
      * @return The index of the item if it is found, UINT64_MAX otherwise
      */
     uint64_t indexOf(const T& item) const {
-        const T* it =  static_cast<const TContainer*>(this)->begin();
-        const T* end =  static_cast<const TContainer*>(this)->end();
+        const T* begin = this->self().begin();
+        const T* end = this->self().end();
 
-        while (it != end) {
+        for (const T* it = begin; it != end; ++it) {
             if (*it == item) {
-                return it - static_cast<const TContainer*>(this)->begin();
+                return it - begin;
             }
-
-            ++it;
         }
 
         return TContainer::InvalidIndex;
@@ -160,7 +157,7 @@ public:
      * @return True if the target was replaced, false otherwise
      */
     bool replaceFirst(const T& target, const T& value) {
-        for (T& item : *static_cast<TContainer*>(this)) {
+        for (T& item : this->self()) {
             if (item == target) {
                 item = value;
                 return true;
@@ -172,6 +169,10 @@ public:
 
 protected:
     Container() = default;
+
+private:
+    TContainer& self() { return *static_cast<TContainer*>(this); }
+    const TContainer& self() const { return *static_cast<const TContainer*>(this); }
 };
 
 }

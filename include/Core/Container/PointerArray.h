@@ -7,15 +7,13 @@
 
 namespace ml {
 
-template <typename T>
-using PointerArrayDefaultDeleter = std::default_delete<T>;
 
 /**
  * A fixed-size array of owned pointers, where each pointer is automatically freed during destruction
  * @tparam T The type of object pointed to by the pointers in the array
  * @tparam D The deleter type, defaults to std::default_delete<T>
  */
-template <typename T, typename D = PointerArrayDefaultDeleter<T>>
+template <typename T, typename D = std::default_delete<T>>
 requires (!std::is_pointer_v<T>)
 class PointerArray final : public ml::Container<PointerArray<T, D>, T*> {
     NO_COPY(PointerArray)
