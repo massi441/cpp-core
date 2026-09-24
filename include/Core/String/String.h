@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Core/Container/Array.h"
-#include "Core/String/StringUtil.h"
-
 #include <cstring>
 #include <string_view>
+
+#include "Core/Container/Array.h"
+#include "Core/String/StringUtil.h"
 
 namespace ml {
 

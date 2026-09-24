@@ -1,9 +1,9 @@
 #pragma once
 
+#include <string_view>
+
 #include "Core/Container/ByteBuffer.h"
 #include "Core/Util/MathHelpers.h"
-
-#include <string_view>
 
 namespace ml {
 
