@@ -27,7 +27,3 @@ if (BUILD_CORE_TEST)
     enable_testing()
     add_subdirectory(tests)
 endif()
-
-# Core API --> Link to this for headers only
-add_library(ml_core_api INTERFACE)
-target_include_directories(ml_core_api INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
