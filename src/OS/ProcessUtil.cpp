@@ -82,7 +82,7 @@ bool terminateProcess(ProcessHandle handle, int returnCode) {
 ml::ReturnValue<int> tryTerminateAllProcessInstance(const std::wstring& processName, int returnCode) {
     HANDLE snapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (snapShot == INVALID_HANDLE_VALUE) {
-        return "Failed to create windows 32 snapshot";
+        return ml::ReturnValue<int>::Failure("Failed to create windows 32 snapshot");
     }
 
     int closedCount = 0;
@@ -92,11 +92,11 @@ ml::ReturnValue<int> tryTerminateAllProcessInstance(const std::wstring& processN
             if (processName == entry.szExeFile) {
                 ProcessHandle handle = ml::openProcess(entry.th32ProcessID);
                 if (handle == nullptr) {
-                    return "Failed to open running instance of process";
+                    return ml::ReturnValue<int>::Failure("Failed to open running instance of process");
                 }
 
                 if (!ml::terminateProcess(handle, returnCode)) {
-                    return "Failed to terminate running instance of process";
+                    return ml::ReturnValue<int>::Failure("Failed to terminate running instance of process");
                 }
             }
         } while (Process32NextW(snapShot, &entry));
@@ -104,7 +104,7 @@ ml::ReturnValue<int> tryTerminateAllProcessInstance(const std::wstring& processN
 
     CloseHandle(snapShot);
 
-    return closedCount;
+    return ml::ReturnValue<int>::Success(closedCount);
 }
 
 #endif

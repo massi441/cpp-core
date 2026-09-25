@@ -1,46 +1,37 @@
 #pragma once
 
 #include <string>
+#include <system_error>
+#include <utility>
 
 #include "Core/String/StringUtil.h"
 
 namespace ml {
 
+/**
+ * A wrapper around a function's return value, with an error message when the value could not be produced.
+ * Acts as an alternative to exceptions.
+ */
 template <typename T>
 requires std::is_default_constructible_v<T>
 class ReturnValue {
 public:
-    ReturnValue(const T& value) {
-        mValue = value;
-        mMessage = "";
+    static ReturnValue Success(const T& value) {
+        return ReturnValue(value, "");
     }
 
-    ReturnValue(const char* message) {
-        mValue = T();
-        mMessage = message;
-    }
-
-    ReturnValue(const std::string& message) {
-        mValue = T();
-        mMessage = message;
+    static ReturnValue Failure(const std::string& message) {
+        return ReturnValue(T(), message);
     }
 
     template <typename ...Args>
     requires (std::same_as<Args, const char*>&& ...)
-    explicit ReturnValue(Args... string) {
-        mValue = T();
-        mMessage = ml::concatString(string...);
+    static ReturnValue Failure(Args... strings) {
+        return ReturnValue(T(), ml::concatString(strings...));
     }
 
-    template <typename F>
-    explicit ReturnValue(std::error_code ec, F&& valueIfSuccess) {
-        if (ec) {
-            mValue = T();
-            mMessage = ec.message();
-        } else {
-            mValue = valueIfSuccess;
-            mMessage = "";
-        }
+    static ReturnValue FromErrorCode(std::error_code ec, const T& valueIfSuccess) {
+        return ec ? Failure(ec.message()) : Success(valueIfSuccess);
     }
 
     bool hasValue() const {
@@ -70,6 +61,9 @@ public:
 private:
     T mValue;
     std::string mMessage;
+
+    ReturnValue(const T& value, std::string message)
+        : mValue(value), mMessage(std::move(message)) {}
 };
 
 }
