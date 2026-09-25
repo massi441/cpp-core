@@ -2,6 +2,8 @@
 
 #include "Core/IO/FsUtil.h"
 
+#include <fstream>
+
 namespace fs = std::filesystem;
 
 namespace ml {
@@ -135,6 +137,27 @@ ml::ReturnValue<uintmax_t> getFileSize(const std::filesystem::path& path) {
     uintmax_t size = fs::file_size(path, ec);
 
     return ml::ReturnValue<uintmax_t>::FromErrorCode(ec, size);
+}
+
+ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path& path, int maxLines) {
+    std::ifstream file(path);
+    if (!file) {
+        return ml::ReturnValue<std::vector<std::string>>::Failure("Failed to read lines of: " + path.string());
+    }
+
+    int count = 0;
+    std::string line;
+    std::vector<std::string> lines;
+    while (count < maxLines && std::getline(file, line)) {
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+
+        count++;
+        lines.push_back(std::move(line));
+    }
+
+    return ml::ReturnValue<std::vector<std::string>>::Success(lines);
 }
 
 }
