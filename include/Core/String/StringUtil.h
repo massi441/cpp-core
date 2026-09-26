@@ -83,8 +83,12 @@ inline const char* toString(bool boolean) {
 /**
  * Returns the length of a compile time string
  */
-consteval size_t strlen(const char* str) {
+consteval size_t strsize(const char* str) {
     return std::char_traits<char>::length(str);
+}
+
+consteval char nullTerminator() {
+    return '\0';
 }
 
 // TODO: Add case insensitive comparison

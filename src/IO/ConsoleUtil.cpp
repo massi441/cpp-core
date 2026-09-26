@@ -24,4 +24,21 @@ int64_t getInputNumber(int64_t lowerBoundIncl, int64_t upperBoundIncl) {
     }
 }
 
+std::string getInputString(const std::string& inputMessage) {
+    std::string input;
+
+    while (input.empty()) {
+        std::cout << inputMessage;
+        std::getline(std::cin, input);
+    }
+
+    return input;
+}
+
+void printIfNotEmpty(const std::string& message) {
+    if (!message.empty()) {
+        std::cout << message << std::endl;
+    }
+}
+
 }

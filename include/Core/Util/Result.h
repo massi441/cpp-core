@@ -29,10 +29,6 @@ public:
         return mError.value();
     }
 
-    operator bool() const {
-        return !mError.has_value();
-    }
-
 private:
     std::optional<E> mError;
 
@@ -77,10 +73,6 @@ public:
 
     E error() const {
         return mError.value();
-    }
-
-    operator bool() const {
-        return !mError.has_value();
     }
 
 private:

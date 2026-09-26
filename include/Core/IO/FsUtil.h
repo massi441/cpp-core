@@ -3,6 +3,9 @@
 #ifndef NN_SWITCH
 
 #include <filesystem>
+#include <fstream>
+#include <unordered_set>
+#include <vector>
 
 #include "Core/Result/ReturnStatus.h"
 #include "Core/Result/ReturnValue.h"
@@ -49,6 +52,28 @@ ml::ReturnStatus copyRecursiveOverwrite(const std::filesystem::path& from, const
 ml::ReturnStatus backupDirNumbered(const std::filesystem::path& source, const std::filesystem::path& backupsDest, uint32_t depth);
 
 ml::ReturnValue<uintmax_t> getFileSize(const std::filesystem::path& path);
+
+ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path& path, int maxLines = -1);
+ml::ReturnValue<std::unordered_set<std::string>> readUniqueLines(const std::filesystem::path& path, int maxLines = -1);
+
+template <typename T>
+ml::ReturnStatus writeLines(const std::filesystem::path& path, const T& lines) {
+    std::ofstream file(path);
+    if (!file) {
+        return ml::ReturnStatus::Failure("Failed to open file {}", path.string());
+    }
+
+    for (const std::string& line : lines) {
+        file << line << std::endl;
+    }
+
+    return ml::ReturnStatus::Success();
+}
+
+/**
+ * Returns the stem of a given path (the file name without the last extension)
+ */
+std::string fileName(const std::filesystem::path& path);
 
 }
 

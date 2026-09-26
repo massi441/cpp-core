@@ -1,12 +1,11 @@
 #pragma once
 
+#include <format>
 #include <string>
-
-#include "Core/String/StringUtil.h"
+#include <system_error>
+#include <utility>
 
 namespace ml {
-
-// TODO: Factory functions and private ctors
 
 /**
  * A wrapper around a function's success status, with an optional error message for failures.
@@ -14,55 +13,45 @@ namespace ml {
  */
 class ReturnStatus {
 public:
-    ReturnStatus(bool isSuccess) {
-        mIsSuccess = isSuccess;
-        mMessage = "";
-    }
-
-    ReturnStatus(const std::string& message) {
-        mIsSuccess = false;
-        mMessage = message;
-    }
-
-    template <typename ...Args>
-    requires (std::same_as<Args, const char*>&& ...)
-    explicit ReturnStatus(Args... strings) {
-        mIsSuccess = false;
-        mMessage = ml::concatString(strings...);
-    }
-
-    explicit ReturnStatus(std::error_code ec) {
-        mIsSuccess = !ec;
-        mMessage = mIsSuccess ? "" : ec.message();
-    }
-
     static ReturnStatus Success() {
-        return ReturnStatus(true);
+        return ReturnStatus(true, "");
     }
 
     static ReturnStatus Failure() {
-        return ReturnStatus(false);
+        return ReturnStatus(false, "");
     }
 
     static ReturnStatus Failure(const std::string& message) {
-        return ReturnStatus(message);
+        return ReturnStatus(false, message);
+    }
+
+    template <typename ...Args>
+    static ReturnStatus Failure(std::format_string<Args...> fmt, Args&&... args) {
+        return ReturnStatus(false, std::format(fmt, std::forward<Args>(args)...));
+    }
+
+    static ReturnStatus FromErrorCode(std::error_code ec) {
+        return ec ? Failure(ec.message()) : Success();
     }
 
     bool isSuccess() const {
         return mIsSuccess;
     }
 
-    const char* message() const {
-        return mMessage.c_str();
+    bool isFailed() const {
+        return !mIsSuccess;
     }
 
-    operator bool() const {
-        return mIsSuccess;
+    const char* message() const {
+        return mMessage.c_str();
     }
 
 private:
     bool mIsSuccess;
     std::string mMessage;
+
+    ReturnStatus(bool isSuccess, std::string message)
+        : mIsSuccess(isSuccess), mMessage(std::move(message)) {}
 };
 
 }
