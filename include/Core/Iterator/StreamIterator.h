@@ -40,7 +40,7 @@ private:
 };
 
 template <typename T>
-class IterableStreamView {
+class StreamIterableView {
 public:
 
 private:
