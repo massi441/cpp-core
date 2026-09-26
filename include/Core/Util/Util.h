@@ -1,5 +1,6 @@
 #pragma once
 
+#include <typeinfo>
 #include <unordered_map>
 
 namespace ml {
@@ -51,6 +52,11 @@ bool ifInstanceOf(B* base, A action) {
     }
 
     return false;
+}
+
+template <typename T>
+const char* getTypeId(const T* ptr) {
+    return typeid(*ptr).name();
 }
 
 }
