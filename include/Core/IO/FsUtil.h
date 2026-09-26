@@ -3,6 +3,8 @@
 #ifndef NN_SWITCH
 
 #include <filesystem>
+#include <fstream>
+#include <unordered_set>
 
 #include "Core/Result/ReturnStatus.h"
 #include "Core/Result/ReturnValue.h"
@@ -51,7 +53,21 @@ ml::ReturnStatus backupDirNumbered(const std::filesystem::path& source, const st
 ml::ReturnValue<uintmax_t> getFileSize(const std::filesystem::path& path);
 
 ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path& path, int maxLines = -1);
-ml::ReturnStatus writeLines(const std::filesystem::path& path, const std::vector<std::string>& lines);
+ml::ReturnValue<std::unordered_set<std::string>> readUniqueLines(const std::filesystem::path& path, int maxLines = -1);
+
+template <typename T>
+ml::ReturnStatus writeLines(const std::filesystem::path& path, const T& lines) {
+    std::ofstream file(path);
+    if (!file) {
+        return ml::ReturnStatus::Failure("Failed to open file " + path.string());
+    }
+
+    for (const std::string& line : lines) {
+        file << line << std::endl;
+    }
+
+    return ml::ReturnStatus::Success();
+}
 
 }
 

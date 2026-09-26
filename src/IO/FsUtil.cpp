@@ -148,8 +148,7 @@ ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path&
     int count = 0;
     std::string line;
     std::vector<std::string> lines;
-    bool isValidLine = maxLines == -1 || (count < maxLines);
-    while (isValidLine && std::getline(file, line)) {
+    while ((maxLines == -1 || count < maxLines) && std::getline(file, line)) {
         if (!line.empty() && line.back() == '\r') {
             line.pop_back();
         }
@@ -161,17 +160,25 @@ ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path&
     return ml::ReturnValue<std::vector<std::string>>::Success(lines);
 }
 
-ml::ReturnStatus writeLines(const std::filesystem::path& path, const std::vector<std::string>& lines) {
-    std::ofstream file(path);
+ml::ReturnValue<std::unordered_set<std::string>> readUniqueLines(const std::filesystem::path& path, int maxLines) {
+    std::ifstream file(path);
     if (!file) {
-        return ml::ReturnStatus::Failure("Failed to open file " + path.string());
+        return ml::ReturnValue<std::unordered_set<std::string>>::Failure("Failed to read lines of: " + path.string());
     }
 
-    for (const std::string& line : lines) {
-        file << line << std::endl;
+    int count = 0;
+    std::string line;
+    std::unordered_set<std::string> lines;
+    while ((maxLines == -1 || count < maxLines) && std::getline(file, line)) {
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+
+        count++;
+        lines.insert(std::move(line));
     }
 
-    return ml::ReturnStatus::Success();
+    return ml::ReturnValue<std::unordered_set<std::string>>::Success(std::move(lines));
 }
 
 }

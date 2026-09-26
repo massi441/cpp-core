@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <system_error>
 #include <utility>
@@ -13,37 +14,54 @@ namespace ml {
  * Acts as an alternative to exceptions.
  */
 template <typename T>
-requires std::is_default_constructible_v<T>
-class ReturnValue {
+class ReturnValue final {
 public:
-    static ReturnValue Success(const T& value) {
-        return ReturnValue(value, "");
+    template <typename F>
+    static ReturnValue Success(F&& value) {
+        return ReturnValue(ValueTag{}, std::forward<F>(value));
     }
 
     static ReturnValue Failure(const std::string& message) {
-        return ReturnValue(T(), message);
+        return ReturnValue(FailureTag{}, message);
     }
 
     template <typename ...Args>
     requires (std::same_as<Args, const char*>&& ...)
     static ReturnValue Failure(Args... strings) {
-        return ReturnValue(T(), ml::concatString(strings...));
+        return ReturnValue(FailureTag{}, ml::concatString(strings...));
     }
 
-    static ReturnValue FromErrorCode(std::error_code ec, const T& valueIfSuccess) {
-        return ec ? Failure(ec.message()) : Success(valueIfSuccess);
+    template <typename F>
+    static ReturnValue FromErrorCode(std::error_code ec, F&& valueIfSuccess) {
+        return ec ? Failure(ec.message()) : Success(std::forward<F>(valueIfSuccess));
     }
 
     bool hasValue() const {
-        return mMessage.empty();
+        return mValue.has_value();
     }
 
-    T value() const {
-        return mValue;
+    T& value() & {
+        return mValue.value();
     }
 
-    T get() const {
-        return mValue;
+    const T& value() const& {
+        return mValue.value();
+    }
+
+    T&& value() && {
+        return std::move(mValue.value());
+    }
+
+    T& get() & {
+        return mValue.value();
+    }
+
+    const T& get() const& {
+        return mValue.value();
+    }
+
+    T&& get() && {
+        return std::move(mValue.value());
     }
 
     const char* message() const {
@@ -51,19 +69,25 @@ public:
     }
 
     operator bool() const {
-        return this->hasValue();
+        return mValue.has_value();
     }
 
-    explicit operator T() const {
-        return mValue;
+    explicit operator const T&() const {
+        return mValue.value();
     }
 
 private:
-    T mValue;
+    std::optional<T> mValue;
     std::string mMessage;
 
-    ReturnValue(const T& value, std::string message)
-        : mValue(value), mMessage(std::move(message)) {}
+private:
+    struct ValueTag {};
+    struct FailureTag {};
+
+    template <typename F>
+    ReturnValue(ValueTag, F&& value) : mValue(std::forward<F>(value)) {}
+
+    ReturnValue(FailureTag, std::string message) : mMessage(std::move(message)) {}
 };
 
 }

@@ -80,6 +80,10 @@ inline const char* toString(bool boolean) {
     return boolean ? "true" : "false";
 }
 
+consteval char nullTerminator() {
+    return '\0';
+}
+
 // TODO: Add case insensitive comparison
 // TODO: Add trimming functions
 
