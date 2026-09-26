@@ -148,7 +148,8 @@ ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path&
     int count = 0;
     std::string line;
     std::vector<std::string> lines;
-    while (count < maxLines && std::getline(file, line)) {
+    bool isValidLine = maxLines == -1 || (count < maxLines);
+    while (isValidLine && std::getline(file, line)) {
         if (!line.empty() && line.back() == '\r') {
             line.pop_back();
         }
@@ -158,6 +159,19 @@ ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path&
     }
 
     return ml::ReturnValue<std::vector<std::string>>::Success(lines);
+}
+
+ml::ReturnStatus writeLines(const std::filesystem::path& path, const std::vector<std::string>& lines) {
+    std::ofstream file(path);
+    if (!file) {
+        return ml::ReturnStatus::Failure("Failed to open file " + path.string());
+    }
+
+    for (const std::string& line : lines) {
+        file << line << std::endl;
+    }
+
+    return ml::ReturnStatus::Success();
 }
 
 }

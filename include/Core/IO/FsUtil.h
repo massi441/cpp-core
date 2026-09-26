@@ -50,7 +50,8 @@ ml::ReturnStatus backupDirNumbered(const std::filesystem::path& source, const st
 
 ml::ReturnValue<uintmax_t> getFileSize(const std::filesystem::path& path);
 
-ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path& path, int maxLines);
+ml::ReturnValue<std::vector<std::string>> readLines(const std::filesystem::path& path, int maxLines = -1);
+ml::ReturnStatus writeLines(const std::filesystem::path& path, const std::vector<std::string>& lines);
 
 }
 

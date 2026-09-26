@@ -40,6 +40,10 @@ public:
         return mIsSuccess;
     }
 
+    bool isFailed() const {
+        return !mIsSuccess;
+    }
+
     const char* message() const {
         return mMessage.c_str();
     }
