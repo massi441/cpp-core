@@ -1,11 +1,10 @@
 #pragma once
 
+#include <format>
 #include <optional>
 #include <string>
 #include <system_error>
 #include <utility>
-
-#include "Core/String/StringUtil.h"
 
 namespace ml {
 
@@ -26,9 +25,8 @@ public:
     }
 
     template <typename ...Args>
-    requires (std::same_as<Args, const char*>&& ...)
-    static ReturnValue Failure(Args... strings) {
-        return ReturnValue(FailureTag{}, ml::concatString(strings...));
+    static ReturnValue Failure(std::format_string<Args...> fmt, Args&&... args) {
+        return ReturnValue(FailureTag{}, std::format(fmt, std::forward<Args>(args)...));
     }
 
     template <typename F>

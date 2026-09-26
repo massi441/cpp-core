@@ -1,10 +1,9 @@
 #pragma once
 
+#include <format>
 #include <string>
 #include <system_error>
 #include <utility>
-
-#include "Core/String/StringUtil.h"
 
 namespace ml {
 
@@ -27,9 +26,8 @@ public:
     }
 
     template <typename ...Args>
-    requires (std::same_as<Args, const char*>&& ...)
-    static ReturnStatus Failure(Args... strings) {
-        return ReturnStatus(false, ml::concatString(strings...));
+    static ReturnStatus Failure(std::format_string<Args...> fmt, Args&&... args) {
+        return ReturnStatus(false, std::format(fmt, std::forward<Args>(args)...));
     }
 
     static ReturnStatus FromErrorCode(std::error_code ec) {

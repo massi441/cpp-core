@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <unordered_set>
+#include <vector>
 
 #include "Core/Result/ReturnStatus.h"
 #include "Core/Result/ReturnValue.h"
@@ -59,7 +60,7 @@ template <typename T>
 ml::ReturnStatus writeLines(const std::filesystem::path& path, const T& lines) {
     std::ofstream file(path);
     if (!file) {
-        return ml::ReturnStatus::Failure("Failed to open file " + path.string());
+        return ml::ReturnStatus::Failure("Failed to open file {}", path.string());
     }
 
     for (const std::string& line : lines) {
