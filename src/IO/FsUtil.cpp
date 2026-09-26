@@ -181,6 +181,10 @@ ml::ReturnValue<std::unordered_set<std::string>> readUniqueLines(const std::file
     return ml::ReturnValue<std::unordered_set<std::string>>::Success(std::move(lines));
 }
 
+std::string fileName(const std::filesystem::path& path) {
+    return path.stem().string();
+}
+
 }
 
 #endif

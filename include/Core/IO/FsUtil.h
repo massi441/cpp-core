@@ -69,6 +69,11 @@ ml::ReturnStatus writeLines(const std::filesystem::path& path, const T& lines) {
     return ml::ReturnStatus::Success();
 }
 
+/**
+ * Returns the stem of a given path (the file name without the last extension)
+ */
+std::string fileName(const std::filesystem::path& path);
+
 }
 
 #endif
