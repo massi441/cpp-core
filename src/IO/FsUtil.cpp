@@ -82,7 +82,7 @@ ml::ReturnStatus copyRecursiveOverwrite(const std::filesystem::path& from, const
     fs::copy_options options = fs::copy_options::recursive | fs::copy_options::overwrite_existing;
 
     ml::ReturnStatus clearStatus = ml::clearDirectory(to);
-    if (!clearStatus) {
+    if (clearStatus.isFailed()) {
         return ml::ReturnStatus::Failure("Failed to clear \"{}\" directory before copy overwrite operation: {}", to.string(), clearStatus.message());
     }
 
@@ -93,11 +93,11 @@ ml::ReturnStatus copyRecursiveOverwrite(const std::filesystem::path& from, const
 
 ml::ReturnStatus backupDirNumbered(const std::filesystem::path& source, const std::filesystem::path& backupsDest, uint32_t depth) {
     std::error_code ec;
-    if (ml::isExistPath(backupsDest)) {
+    if (ml::isExistPath(backupsDest).isSuccess()) {
         // remove oldest back up (if present)
         fs::path maxBackupPath = backupsDest / std::to_string(depth);
 
-        if (ml::isExistPath(maxBackupPath)) {
+        if (ml::isExistPath(maxBackupPath).isSuccess()) {
             fs::remove_all(maxBackupPath, ec);
 
             if (ec) {
@@ -110,7 +110,7 @@ ml::ReturnStatus backupDirNumbered(const std::filesystem::path& source, const st
             fs::path backupPath = backupsDest / std::to_string(i);
             fs::path newBackupPath = backupsDest / std::to_string(i + 1);
 
-            if (!ml::isExistPath(backupPath)) {
+            if (ml::isExistPath(backupPath).isFailed()) {
                 continue;
             }
 

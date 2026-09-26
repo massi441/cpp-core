@@ -38,6 +38,14 @@ public:
         return mValue.has_value();
     }
 
+    bool isSuccess() const {
+        return mValue.has_value();
+    }
+
+    bool isFailed() const {
+        return !mValue.has_value();
+    }
+
     T& value() & {
         return mValue.value();
     }
@@ -64,10 +72,6 @@ public:
 
     const char* message() const {
         return mMessage.c_str();
-    }
-
-    operator bool() const {
-        return mValue.has_value();
     }
 
     explicit operator const T&() const {

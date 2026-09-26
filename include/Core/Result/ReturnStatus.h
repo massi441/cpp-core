@@ -46,10 +46,6 @@ public:
         return mMessage.c_str();
     }
 
-    operator bool() const {
-        return mIsSuccess;
-    }
-
 private:
     bool mIsSuccess;
     std::string mMessage;
