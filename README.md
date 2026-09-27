@@ -1,4 +1,4 @@
-# Core CPP
+# C++ Core
 
 Reusable stuff for cpp projects
 
