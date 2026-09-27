@@ -6,5 +6,5 @@ Reusable stuff for cpp projects
 
 Build command for the CLion profile:
 ```
--DCMAKE_TOOLCHAIN_FILE=D:/GitLibs/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_CORE_TEST=ON
+-DCMAKE_TOOLCHAIN_FILE=${VCPKG_PATH}/scripts/buildsystems/vcpkg.cmake -DBUILD_CORE_TEST=ON
 ```
