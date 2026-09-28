@@ -38,7 +38,7 @@ public:
      */
     void writeStr(const char* str) {
         size_t len = std::strlen(str);
-        write(str, len);
+        this->write(str, len);
         mCursor += len;
     }
 

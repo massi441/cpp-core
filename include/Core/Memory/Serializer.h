@@ -2,8 +2,8 @@
 
 #include <concepts>
 
-#include "Core/Memory/SpanWriter.h"
 #include "Core/Memory/SpanReader.h"
+#include "Core/Memory/SpanWriter.h"
 
 namespace ml {
 

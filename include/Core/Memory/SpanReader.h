@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Core/Util/Types.h"
 #include <cstddef>
 #include <cstdint>
+
+#include "Core/Util/Types.h"
 
 namespace ml {
 

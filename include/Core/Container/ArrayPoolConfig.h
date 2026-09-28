@@ -22,17 +22,17 @@ struct ArrayPoolConfig {
     ushort bucketSize = 3;
 
     ArrayPoolConfig& withMinSize(size_t size) {
-        this->arrayMinSize = size;
+        arrayMinSize = size;
         return *this;
     }
 
     ArrayPoolConfig& withBuckets(ushort buckets) {
-        this->totalBuckets = buckets;
+        totalBuckets = buckets;
         return *this;
     }
 
     ArrayPoolConfig& withBucketSize(ushort size) {
-        this->bucketSize = size;
+        bucketSize = size;
         return *this;
     }
 };

@@ -69,7 +69,7 @@ public:
 
     const char* c_str() const { return mBuf.cdata(); }
     uint64_t length() const { return mBuf.size() - 1; }
-    operator std::string_view() const { return std::string_view(this->c_str(), length()); }
+    operator std::string_view() const { return std::string_view(this->c_str(), this->length()); }
     operator const char*() const { return this->c_str(); }
 
 private:

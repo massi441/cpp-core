@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+
 #include "Core/Util/Types.h"
 
 template <typename T>
