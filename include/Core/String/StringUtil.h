@@ -51,6 +51,19 @@ inline ptrdiff_t delimiterOffset(const char* source, char delimiter) {
     return delimPtr - source;
 }
 
+/**
+ * Copies the string up to (excluding) the first delimiter, or the whole string if the delimiter is not found
+ */
+inline std::string substringUntil(const char* source, char delimiter) {
+    ptrdiff_t offset = ml::delimiterOffset(source, delimiter);
+
+    if (offset == -1) {
+        return std::string(source);
+    }
+
+    return std::string(source, offset);
+}
+
 inline std::vector<std::string> split(const std::string& str, char delimiter) {
     std::vector<std::string> symbols;
     std::stringstream stream = std::stringstream(str);
@@ -68,7 +81,7 @@ requires (std::same_as<Args, const char*>&& ...)
 std::string concatString(Args... strings) {
     size_t strlen = (std::strlen(strings) + ...);
     std::string str;
-    str.resize(strlen + 1);
+    str.resize(strlen);
 
     char* ptr = str.data();
     ((ptr = ml::stpcpy(ptr, strings)), ...);
