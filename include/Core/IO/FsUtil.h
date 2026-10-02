@@ -3,6 +3,7 @@
 #ifndef NN_SWITCH
 
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <unordered_set>
 #include <vector>
@@ -12,26 +13,25 @@
 
 namespace ml {
 
-template <typename ... Args>
-std::filesystem::path fromCurrentPath(Args... args) {
-    std::filesystem::path path = std::filesystem::current_path();
-    (path.append(std::forward<Args>(args)), ...);
-    return path;
+/**
+ * Formats a path relative to the current working directory, e.g. fromCurrentPath("input/{}.bfgrp", name)
+ */
+template <typename... Args>
+std::filesystem::path fromCurrentPath(std::format_string<Args...> fmt, Args&&... args) {
+    return std::filesystem::current_path() / std::format(fmt, std::forward<Args>(args)...);
 }
 
-template <typename ...Args>
-std::filesystem::path makePath(Args&& ...args) {
-    std::filesystem::path path;
-    (path.append(std::forward<Args>(args)), ...);
-    return path;
+template <typename... Args>
+std::filesystem::path makePath(std::format_string<Args...> fmt, Args&&... args) {
+    return std::filesystem::path(std::format(fmt, std::forward<Args>(args)...));
 }
 
-template <typename ... Args>
-std::filesystem::path fromParentPath(const std::filesystem::path& basePath, Args&& ...args) {
-    std::filesystem::path path = basePath.parent_path();
-    (path.append(std::forward<Args>(args)), ...);
-    return path;
+template <typename... Args>
+std::filesystem::path fromParentPath(const std::filesystem::path& basePath, std::format_string<Args...> fmt, Args&&... args) {
+    return basePath.parent_path() / std::format(fmt, std::forward<Args>(args)...);
 }
+
+bool isExistFile(const std::filesystem::path& path);
 
 ml::ReturnStatus ensureDirCreated(const std::filesystem::path& path);
 ml::ReturnStatus clearDirectory(const std::filesystem::path& path);

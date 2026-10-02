@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstring>
 #include <memory>
 
 #include "Core/Util/Types.h"
@@ -39,7 +40,6 @@ public:
     void writeStr(const char* str) {
         size_t len = std::strlen(str);
         write(str, len);
-        mCursor += len;
     }
 
     template <typename T>

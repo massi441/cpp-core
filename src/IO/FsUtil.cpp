@@ -8,6 +8,11 @@ namespace fs = std::filesystem;
 
 namespace ml {
 
+bool isExistFile(const std::filesystem::path& path) {
+    std::error_code ec;
+    return fs::exists(path, ec) && fs::is_regular_file(path, ec);
+}
+
 ml::ReturnStatus ensureDirCreated(const fs::path& path) {
     std::error_code ec;
     if (fs::exists(path, ec)) {
